@@ -4,7 +4,7 @@ const workouts = {
     title: "DEADLIFT",
     focus: "Conventional deadlifts only. This day stays intentionally simple.",
     exercises: [
-      { name: "Conventional Deadlift", sets: "4 sets × 3–6 reps", note: "Stop the session after deadlifts.", featured: true }
+      { name: "Conventional Deadlift", sets: 4, repRange: "3–6 reps", note: "Stop the session after deadlifts.", featured: true }
     ]
   },
   upper: {
@@ -12,11 +12,11 @@ const workouts = {
     title: "UPPER",
     focus: "Back, arms, and core.",
     exercises: [
-      { name: "Lat Pull Down", sets: "3 sets × 8–12 reps" },
-      { name: "Cable Rows", sets: "3 sets × 8–12 reps" },
-      { name: "Pull Over Machine", sets: "3 sets × 10–15 reps" },
-      { name: "Hammer Curls", sets: "3 sets × 10–15 reps" },
-      { name: "Cable Crunches", sets: "3 sets × 12–20 reps" }
+      { name: "Lat Pull Down", sets: 3, repRange: "8–12 reps" },
+      { name: "Cable Rows", sets: 3, repRange: "8–12 reps" },
+      { name: "Pull Over Machine", sets: 3, repRange: "10–15 reps" },
+      { name: "Hammer Curls", sets: 3, repRange: "10–15 reps" },
+      { name: "Cable Crunches", sets: 3, repRange: "12–20 reps" }
     ]
   },
   lower: {
@@ -24,10 +24,10 @@ const workouts = {
     title: "LOWER",
     focus: "Squat patterns, legs, and unilateral work.",
     exercises: [
-      { name: "Standing Squat Machine", sets: "3 sets × 8–12 reps" },
-      { name: "Sitting Squat Machine", sets: "3 sets × 10–15 reps" },
-      { name: "Lunges", sets: "3 sets × 8–12 reps per leg" },
-      { name: "Goblet Squats", sets: "3 sets × 10–15 reps" }
+      { name: "Standing Squat Machine", sets: 3, repRange: "8–12 reps" },
+      { name: "Sitting Squat Machine", sets: 3, repRange: "10–15 reps" },
+      { name: "Lunges", sets: 3, repRange: "8–12 reps per leg" },
+      { name: "Goblet Squats", sets: 3, repRange: "10–15 reps" }
     ]
   },
   combo: {
@@ -35,17 +35,17 @@ const workouts = {
     title: "COMBO",
     focus: "A balanced full-body session using the same preferred movements.",
     exercises: [
-      { name: "Goblet Squats", sets: "3 sets × 8–12 reps" },
-      { name: "Lat Pull Down", sets: "3 sets × 8–12 reps" },
-      { name: "Lunges", sets: "3 sets × 8–12 reps per leg" },
-      { name: "Cable Rows", sets: "3 sets × 10–15 reps" },
-      { name: "Hammer Curls", sets: "3 sets × 10–15 reps" },
-      { name: "Cable Crunches", sets: "3 sets × 12–20 reps" }
+      { name: "Goblet Squats", sets: 3, repRange: "8–12 reps" },
+      { name: "Lat Pull Down", sets: 3, repRange: "8–12 reps" },
+      { name: "Lunges", sets: 3, repRange: "8–12 reps per leg" },
+      { name: "Cable Rows", sets: 3, repRange: "10–15 reps" },
+      { name: "Hammer Curls", sets: 3, repRange: "10–15 reps" },
+      { name: "Cable Crunches", sets: 3, repRange: "12–20 reps" }
     ]
   }
 };
 
-const STORAGE_KEY = "jaxx-training-log-v1";
+const STORAGE_KEY = "jaxx-training-log-v2";
 const SELECTED_DAY_KEY = "jaxx-selected-day";
 
 const workoutContainer = document.getElementById("workout");
@@ -92,6 +92,23 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function previousSetsMarkup(previousExercise) {
+  if (!previousExercise || !previousExercise.sets?.length) {
+    return `<p class="previous-sets-title">No previous set data.</p>`;
+  }
+
+  return `
+    <p class="previous-sets-title">Previous session</p>
+    <div class="previous-sets-list">
+      ${previousExercise.sets.map((set, index) => `
+        <span class="previous-set-chip">
+          S${index + 1}: ${escapeHtml(set.weight)} lb × ${escapeHtml(set.reps)}
+        </span>
+      `).join("")}
+    </div>
+  `;
+}
+
 function renderHistory(dayKey) {
   const sessions = getSessions(dayKey).slice().reverse();
 
@@ -111,11 +128,18 @@ function renderHistory(dayKey) {
         ${sessions.map(session => `
           <article class="history-item">
             <p class="history-date">${formatDate(session.savedAt)}</p>
-            <ul class="history-exercises">
-              ${session.entries.map(entry => `
-                <li><strong>${escapeHtml(entry.name)}:</strong> ${escapeHtml(entry.weight)} lb</li>
-              `).join("")}
-            </ul>
+
+            ${session.exercises.map(exercise => `
+              <div class="history-exercise">
+                <p class="history-exercise-name">${escapeHtml(exercise.name)}</p>
+                <p class="history-sets">
+                  ${exercise.sets.map((set, index) =>
+                    `S${index + 1}: ${escapeHtml(set.weight)} lb × ${escapeHtml(set.reps)}`
+                  ).join(" · ")}
+                </p>
+              </div>
+            `).join("")}
+
             <div class="history-actions">
               <button class="delete-session" data-session-id="${session.id}">Delete</button>
             </div>
@@ -143,35 +167,64 @@ function renderWorkout(dayKey) {
     </div>
 
     <div class="exercise-list">
-      ${workout.exercises.map((exercise, index) => {
-        const lastEntry = previous?.entries?.find(entry => entry.name === exercise.name);
+      ${workout.exercises.map((exercise, exerciseIndex) => {
+        const previousExercise = previous?.exercises?.find(item => item.name === exercise.name);
+
         return `
           <article class="exercise-card ${exercise.featured ? "deadlift-only" : ""}">
             <div class="exercise-topline">
               <h3>${exercise.name}</h3>
-              <span class="order">${String(index + 1).padStart(2, "0")}</span>
+              <span class="order">${String(exerciseIndex + 1).padStart(2, "0")}</span>
             </div>
-            <p class="prescription">${exercise.sets}</p>
+
+            <p class="prescription">${exercise.sets} sets × ${exercise.repRange}</p>
             ${exercise.note ? `<p class="note">${exercise.note}</p>` : ""}
 
-            <div class="log-row">
-              <label>
-                <span class="field-label">Weight used (lb)</span>
-                <input
-                  class="weight-input"
-                  type="number"
-                  inputmode="decimal"
-                  min="0"
-                  step="0.5"
-                  placeholder="${lastEntry ? `Last: ${lastEntry.weight}` : "Enter weight"}"
-                  data-exercise="${escapeHtml(exercise.name)}"
-                />
-              </label>
+            <div class="previous-sets">
+              ${previousSetsMarkup(previousExercise)}
             </div>
 
-            <p class="last-weight">
-              ${lastEntry ? `Last session: <strong>${escapeHtml(lastEntry.weight)} lb</strong>` : "No previous weight logged."}
-            </p>
+            <div class="set-grid">
+              ${Array.from({ length: exercise.sets }, (_, setIndex) => {
+                const previousSet = previousExercise?.sets?.[setIndex];
+
+                return `
+                  <div class="set-row">
+                    <div class="set-number">${setIndex + 1}</div>
+
+                    <label>
+                      <span class="field-label">Weight</span>
+                      <input
+                        class="set-input"
+                        type="number"
+                        inputmode="decimal"
+                        min="0"
+                        step="0.5"
+                        placeholder="${previousSet?.weight ?? "lb"}"
+                        data-exercise="${escapeHtml(exercise.name)}"
+                        data-set="${setIndex}"
+                        data-field="weight"
+                      />
+                    </label>
+
+                    <label>
+                      <span class="field-label">Reps</span>
+                      <input
+                        class="set-input"
+                        type="number"
+                        inputmode="numeric"
+                        min="0"
+                        step="1"
+                        placeholder="${previousSet?.reps ?? "reps"}"
+                        data-exercise="${escapeHtml(exercise.name)}"
+                        data-set="${setIndex}"
+                        data-field="reps"
+                      />
+                    </label>
+                  </div>
+                `;
+              }).join("")}
+            </div>
           </article>
         `;
       }).join("")}
@@ -193,18 +246,42 @@ function renderWorkout(dayKey) {
 }
 
 function saveCurrentWorkout(dayKey) {
-  const inputs = [...document.querySelectorAll(".weight-input")];
-  const entries = inputs
-    .map(input => ({
-      name: input.dataset.exercise,
-      weight: input.value.trim()
-    }))
-    .filter(entry => entry.weight !== "");
-
+  const workout = workouts[dayKey];
   const message = document.getElementById("save-message");
 
-  if (!entries.length) {
-    message.textContent = "Enter at least one weight before saving.";
+  const exercises = workout.exercises.map(exercise => {
+    const sets = Array.from({ length: exercise.sets }, (_, setIndex) => {
+      const weightInput = document.querySelector(
+        `[data-exercise="${CSS.escape(exercise.name)}"][data-set="${setIndex}"][data-field="weight"]`
+      );
+      const repsInput = document.querySelector(
+        `[data-exercise="${CSS.escape(exercise.name)}"][data-set="${setIndex}"][data-field="reps"]`
+      );
+
+      return {
+        weight: weightInput?.value.trim() || "",
+        reps: repsInput?.value.trim() || ""
+      };
+    }).filter(set => set.weight !== "" || set.reps !== "");
+
+    return {
+      name: exercise.name,
+      sets
+    };
+  }).filter(exercise => exercise.sets.length);
+
+  if (!exercises.length) {
+    message.textContent = "Enter at least one set before saving.";
+    message.style.color = "var(--danger)";
+    return;
+  }
+
+  const incompleteSet = exercises.some(exercise =>
+    exercise.sets.some(set => set.weight === "" || set.reps === "")
+  );
+
+  if (incompleteSet) {
+    message.textContent = "Each logged set needs both weight and reps.";
     message.style.color = "var(--danger)";
     return;
   }
@@ -215,7 +292,7 @@ function saveCurrentWorkout(dayKey) {
   log[dayKey].push({
     id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     savedAt: new Date().toISOString(),
-    entries
+    exercises
   });
 
   saveLog(log);

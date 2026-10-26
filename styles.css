@@ -201,46 +201,84 @@ h1 {
   line-height: 1.45;
 }
 
-.log-row {
+.set-grid {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 10px;
   margin-top: 18px;
+}
+
+.set-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr;
+  gap: 10px;
+  align-items: end;
+}
+
+.set-number {
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #111113;
+  border: 1px solid var(--line);
+  font-weight: 900;
+  color: var(--muted);
 }
 
 .field-label {
   display: block;
   margin-bottom: 7px;
-  font-size: .92rem;
+  font-size: .86rem;
   font-weight: 800;
   color: var(--muted);
 }
 
-.weight-input {
+.set-input {
   width: 100%;
   min-height: 58px;
   border: 1px solid #44444a;
   border-radius: 14px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   background: #0f0f11;
   color: var(--text);
-  font-size: 1.25rem;
+  font-size: 1.12rem;
   font-weight: 800;
   outline: none;
 }
 
-.weight-input:focus {
+.set-input:focus {
   border-color: #8a8a93;
   box-shadow: 0 0 0 3px rgba(255,255,255,.06);
 }
 
-.last-weight {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: .95rem;
+.previous-sets {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #111113;
+  border: 1px solid var(--line);
 }
 
-.last-weight strong { color: var(--text); }
+.previous-sets-title {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 800;
+}
+
+.previous-sets-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.previous-set-chip {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #222226;
+  font-size: .9rem;
+  font-weight: 800;
+}
 
 .deadlift-only {
   padding: 28px 22px;
@@ -303,21 +341,29 @@ h1 {
 }
 
 .history-date {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-weight: 900;
   font-size: 1rem;
 }
 
-.history-exercises {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: var(--muted);
+.history-exercise {
+  margin-top: 12px;
 }
 
-.history-exercises strong { color: var(--text); }
+.history-exercise:first-of-type {
+  margin-top: 0;
+}
+
+.history-exercise-name {
+  margin: 0 0 6px;
+  font-weight: 900;
+}
+
+.history-sets {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
 
 .history-actions {
   display: flex;
@@ -357,6 +403,19 @@ footer {
   }
 
   .exercise-card { padding: 24px; }
+}
+
+@media (max-width: 430px) {
+  .set-row {
+    grid-template-columns: 46px 1fr 1fr;
+    gap: 8px;
+  }
+
+  .set-input {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

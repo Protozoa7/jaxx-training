@@ -1,30 +1,36 @@
-# Jaxx Training Site
+# Jaxx Training Site — Per-Set Logging
 
-A standalone, mobile-first four-day workout website with a local workout log.
+This version lets Jaxx log each set individually.
 
-## New logging features
+## Features
 
-- Enter the weight used for each exercise.
-- Save a completed workout.
-- Previous-session weights are shown automatically.
-- Each workout day keeps its own training history.
-- Saved sessions can be deleted individually.
-- All training data is stored with browser `localStorage`.
+- Separate weight and reps inputs for every prescribed set.
+- Previous-session set data shown above the new inputs.
+- Full session history by workout day.
+- Delete individual saved workouts.
+- Data saved locally using browser localStorage.
+- Mobile-first layout with large touch targets and readable text.
 
-## Important limitation
+## Example
 
-Training history is stored only in the browser on the device being used. It does **not** automatically sync between Jaxx's phone, another phone, or a computer.
+For Lat Pull Down:
 
-Clearing browser/site data can also erase the saved training log.
+- Set 1: 80 lb × 12
+- Set 2: 90 lb × 10
+- Set 3: 90 lb × 9
 
-## Files
+The next time she opens Upper day, those previous sets are displayed above the new blank inputs.
 
-- `index.html`
-- `styles.css`
-- `script.js`
+## GitHub Pages update
 
-No frameworks, package managers, or external libraries are required.
+Replace the existing files in your repository with:
 
-## GitHub Pages
+- index.html
+- styles.css
+- script.js
 
-Replace the existing files in your repository with these updated versions, commit the changes, and GitHub Pages will redeploy automatically.
+Then commit the changes. GitHub Pages should redeploy automatically.
+
+## Important
+
+Training history remains local to the browser/device. It does not sync between devices.
