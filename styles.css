@@ -7,11 +7,11 @@
   --line: #2d2d32;
   --accent: #f3f3f3;
   --accent-text: #101010;
+  --good: #bff3ca;
+  --danger: #ffb7b7;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
   background: var(--bg);
@@ -29,9 +29,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-button {
-  font: inherit;
-}
+button, input { font: inherit; }
 
 .app {
   width: min(100%, 760px);
@@ -39,16 +37,14 @@ button {
   padding: 30px 18px 48px;
 }
 
-.hero {
-  padding: 10px 2px 26px;
-}
+.hero { padding: 10px 2px 26px; }
 
 .kicker {
   margin: 0 0 10px;
-  font-size: 0.9rem;
+  font-size: .9rem;
   line-height: 1;
   font-weight: 900;
-  letter-spacing: 0.16em;
+  letter-spacing: .16em;
   color: var(--muted);
 }
 
@@ -56,8 +52,8 @@ h1 {
   margin: 0;
   max-width: 8ch;
   font-size: clamp(2.7rem, 14vw, 5.5rem);
-  line-height: 0.84;
-  letter-spacing: -0.065em;
+  line-height: .84;
+  letter-spacing: -.065em;
   font-weight: 950;
 }
 
@@ -90,12 +86,9 @@ h1 {
   font-weight: 900;
   text-align: left;
   cursor: pointer;
-  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
 }
 
-.day-button:active {
-  transform: scale(0.98);
-}
+.day-button:active { transform: scale(.98); }
 
 .day-button.active {
   background: var(--accent);
@@ -104,32 +97,28 @@ h1 {
 }
 
 .day-number {
-  opacity: 0.55;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
+  opacity: .55;
+  font-size: .85rem;
+  letter-spacing: .08em;
 }
 
-.workout {
-  min-height: 360px;
-}
+.workout { min-height: 360px; }
 
-.workout-heading {
-  margin-bottom: 18px;
-}
+.workout-heading { margin-bottom: 18px; }
 
 .workout-heading .label {
   margin: 0 0 8px;
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: .84rem;
   font-weight: 900;
-  letter-spacing: 0.14em;
+  letter-spacing: .14em;
 }
 
 .workout-heading h2 {
   margin: 0;
   font-size: clamp(2.1rem, 10vw, 3.7rem);
-  line-height: 0.95;
-  letter-spacing: -0.045em;
+  line-height: .95;
+  letter-spacing: -.045em;
 }
 
 .workout-heading .focus {
@@ -137,6 +126,26 @@ h1 {
   color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.5;
+}
+
+.previous-session {
+  margin: 18px 0 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #111113;
+}
+
+.previous-session strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+}
+
+.previous-session p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
 }
 
 .exercise-list {
@@ -162,10 +171,10 @@ h1 {
   margin: 0;
   font-size: clamp(1.35rem, 6vw, 1.8rem);
   line-height: 1.12;
-  letter-spacing: -0.025em;
+  letter-spacing: -.025em;
 }
 
-.exercise-card .order {
+.order {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
@@ -175,7 +184,7 @@ h1 {
   background: #29292e;
   color: #d9d9dd;
   font-weight: 900;
-  font-size: 0.95rem;
+  font-size: .95rem;
 }
 
 .prescription {
@@ -192,6 +201,47 @@ h1 {
   line-height: 1.45;
 }
 
+.log-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: .92rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.weight-input {
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid #44444a;
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: #0f0f11;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 800;
+  outline: none;
+}
+
+.weight-input:focus {
+  border-color: #8a8a93;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+}
+
+.last-weight {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.last-weight strong { color: var(--text); }
+
 .deadlift-only {
   padding: 28px 22px;
   border: 1px solid #414147;
@@ -202,37 +252,102 @@ h1 {
   font-size: clamp(1.8rem, 9vw, 3rem);
 }
 
-.deadlift-only .prescription {
-  font-size: 1.3rem;
+.save-workout {
+  width: 100%;
+  min-height: 64px;
+  margin-top: 22px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 1.2rem;
+  font-weight: 950;
+  cursor: pointer;
 }
 
-.deadlift-reminder {
-  margin: 22px 0 0;
-  padding: 18px 20px;
-  border-radius: 16px;
-  background: #111113;
-  border: 1px dashed #3b3b40;
+.save-workout:active { transform: scale(.99); }
+
+.save-message {
+  min-height: 28px;
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: .95rem;
+  font-weight: 800;
+  color: var(--good);
+}
+
+.history {
+  margin-top: 34px;
+}
+
+.history h3 {
+  margin: 0 0 14px;
+  font-size: 1.4rem;
+}
+
+.history-empty {
   color: var(--muted);
+  margin: 0;
+}
+
+.history-list {
+  display: grid;
+  gap: 12px;
+}
+
+.history-item {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: #121214;
+}
+
+.history-date {
+  margin: 0 0 10px;
+  font-weight: 900;
   font-size: 1rem;
-  line-height: 1.5;
+}
+
+.history-exercises {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+}
+
+.history-exercises strong { color: var(--text); }
+
+.history-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.delete-session {
+  border: 1px solid #4a3030;
+  border-radius: 12px;
+  padding: 9px 11px;
+  background: #1a1111;
+  color: var(--danger);
+  font-size: .86rem;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 footer {
   padding-top: 42px;
   text-align: center;
   color: #74747b;
-  font-size: 0.9rem;
+  font-size: .9rem;
   font-weight: 700;
 }
 
 @media (min-width: 620px) {
-  .app {
-    padding: 46px 28px 60px;
-  }
+  .app { padding: 46px 28px 60px; }
 
-  .day-nav {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  .day-nav { grid-template-columns: repeat(4, 1fr); }
 
   .day-button {
     min-height: 88px;
@@ -241,9 +356,7 @@ footer {
     justify-content: center;
   }
 
-  .exercise-card {
-    padding: 24px;
-  }
+  .exercise-card { padding: 24px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
